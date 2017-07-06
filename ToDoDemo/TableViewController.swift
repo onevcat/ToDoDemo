@@ -18,15 +18,14 @@ class TableViewController: UITableViewController {
         let text: String
     }
     
-    var state: State = State(todos: [], text: "") {
+    var state = State(todos: [], text: "") {
         didSet {
             if oldValue.todos != state.todos {
                 tableView.reloadData()
+                title = "TODO - (\(state.todos.count))"
             }
             
-            title = "TODO - (\(state.todos.count))"
-            
-            if oldValue.text != state.text {
+            if (oldValue.text != state.text) {
                 let isItemLengthEnough = state.text.count >= 3
                 navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
                 
@@ -45,7 +44,6 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        state = State(todos: [], text: "")
         ToDoStore.shared.getToDoItems { (data) in
             self.state = State(todos: self.state.todos + data, text: self.state.text)
         }
@@ -95,14 +93,8 @@ class TableViewController: UITableViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
-        let inputIndexPath = IndexPath(row: 0, section: Section.input.rawValue)
-        guard let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell,
-              let text = inputCell.textField.text else
-        {
-            return
-        }
-        
-        state = State(todos: [text] + state.todos, text: "")
+        print(state.text)
+        state = State(todos: [state.text] + state.todos, text: "")
     }
 }
 
