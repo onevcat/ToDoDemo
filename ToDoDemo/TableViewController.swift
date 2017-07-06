@@ -26,6 +26,7 @@ class TableViewController: UITableViewController {
         
         ToDoStore.shared.getToDoItems { (data) in
             self.todos += data
+            self.title = "TODO - (\(self.todos.count))"
             self.tableView.reloadData()
         }
     }
@@ -70,6 +71,7 @@ class TableViewController: UITableViewController {
         }
         
         todos.remove(at: indexPath.row)
+        title = "TODO - (\(todos.count))"
         tableView.reloadData()
     }
     
@@ -81,6 +83,7 @@ class TableViewController: UITableViewController {
             return
         }
         todos.insert(text, at: 0)
+        title = "TODO - (\(todos.count))"
         tableView.reloadData()
         inputCell.textField.text = ""
     }
