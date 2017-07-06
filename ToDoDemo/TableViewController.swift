@@ -18,11 +18,13 @@ class TableViewController: UITableViewController {
         let text: String
     }
     
-    var state = State(todos: [], text: "") {
+    var state: State = State(todos: [], text: "") {
         didSet {
             if oldValue.todos != state.todos {
                 tableView.reloadData()
             }
+            
+            title = "TODO - (\(state.todos.count))"
             
             if oldValue.text != state.text {
                 let isItemLengthEnough = state.text.count >= 3
@@ -43,9 +45,7 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "TODO - (0)"
-        navigationItem.rightBarButtonItem?.isEnabled = false
-        
+        state = State(todos: [], text: "")
         ToDoStore.shared.getToDoItems { (data) in
             self.state = State(todos: self.state.todos + data, text: self.state.text)
         }
