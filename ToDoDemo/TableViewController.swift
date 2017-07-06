@@ -93,7 +93,6 @@ class TableViewController: UITableViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
-        print(state.text)
         state = State(todos: [state.text] + state.todos, text: "")
     }
 }
