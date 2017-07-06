@@ -13,11 +13,33 @@ let todoCellResueId = "todoCell"
 
 class TableViewController: UITableViewController {
     
+    struct State {
+        let todos: [String]
+        let text: String
+    }
+    
+    var state = State(todos: [], text: "") {
+        didSet {
+            if oldValue.todos != state.todos {
+                tableView.reloadData()
+            }
+            
+            if oldValue.text != state.text {
+                let isItemLengthEnough = state.text.count >= 3
+                navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
+                
+                let inputIndexPath = IndexPath(row: 0, section: Section.input.rawValue)
+                guard let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell else {
+                    return
+                }
+                inputCell.textField.text = state.text
+            }
+        }
+    }
+    
     enum Section: Int {
         case input = 0, todos, max
     }
-    
-    var todos: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,8 +47,7 @@ class TableViewController: UITableViewController {
         navigationItem.rightBarButtonItem?.isEnabled = false
         
         ToDoStore.shared.getToDoItems { (data) in
-            self.todos += data
-            self.tableView.reloadData()
+            self.state = State(todos: self.state.todos + data, text: self.state.text)
         }
     }
     
@@ -40,7 +61,7 @@ class TableViewController: UITableViewController {
         }
         switch section {
         case .input: return 1
-        case .todos: return todos.count
+        case .todos: return state.todos.count
         case .max: fatalError()
         }
     }
@@ -57,7 +78,7 @@ class TableViewController: UITableViewController {
             return cell
         case .todos:
             let cell = tableView.dequeueReusableCell(withIdentifier: todoCellResueId, for: indexPath)
-            cell.textLabel?.text = todos[indexPath.row]
+            cell.textLabel?.text = state.todos[indexPath.row]
             return cell
         default:
             fatalError()
@@ -69,8 +90,8 @@ class TableViewController: UITableViewController {
             return
         }
         
-        todos.remove(at: indexPath.row)
-        tableView.reloadData()
+        let newTodos = Array(state.todos[..<indexPath.row] + state.todos[(indexPath.row + 1)...])
+        state = State(todos: newTodos, text: state.text)
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -80,16 +101,14 @@ class TableViewController: UITableViewController {
         {
             return
         }
-        todos.insert(text, at: 0)
-        tableView.reloadData()
-        inputCell.textField.text = ""
+        
+        state = State(todos: [text] + state.todos, text: "")
     }
 }
 
 extension TableViewController: TableViewInputCellDelegate {
     func inputChanged(cell: TableViewInputCell, text: String) {
-        let isItemLengthEnough = text.count >= 3
-        navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
+        state = State(todos: state.todos, text: text)
     }
 }
 
