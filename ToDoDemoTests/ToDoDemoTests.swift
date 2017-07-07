@@ -27,42 +27,93 @@ class ToDoDemoTests: XCTestCase {
         super.tearDown()
     }
     
-    func testSettingState() {
-        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 0)
-        XCTAssertEqual(controller.title, "TODO - (0)")
-        XCTAssertFalse(controller.navigationItem.rightBarButtonItem!.isEnabled)
+    func testReducerUpdateTextFromEmpty() {
+        let initState = TableViewController.State()
+        let state = controller.reducer(action: .updateText(text: "123"), state: initState)
+        XCTAssertEqual(state.text, "123")
+    }
+    
+    func testReducerUpdateTextFromExisting() {
+        var initState = TableViewController.State()
+        initState.text = "123"
+        let state = controller.reducer(action: .updateText(text: "321"), state: initState)
+        XCTAssertEqual(state.text, "321")
+    }
+    
+    func testReducerUpdateTextToEmpty() {
+        var initState = TableViewController.State()
+        initState.text = "123"
+        let state = controller.reducer(action: .updateText(text: ""), state: initState)
+        XCTAssertEqual(state.text, "")
+    }
+    
+    func testReducerAddToDos() {
+        var initState = TableViewController.State()
+        initState.dataSource = TableViewControllerDataSource(todos: ["1"], owner: nil)
+        let state = controller.reducer(action: .addToDos(items: ["3", "2"]), state: initState)
+        XCTAssertEqual(state.dataSource.todos, ["3", "2", "1"])
+    }
+    
+    func testUpdateView() {
         
-        controller.state = TableViewController.State(todos: ["1", "2", "3"], text: "abc")
-        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 3)
-        XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 1))?.textLabel?.text, "2")
-        XCTAssertEqual(controller.title, "TODO - (3)")
+        let state1 = TableViewController.State(
+            dataSource:TableViewControllerDataSource(todos: [], owner: nil),
+            text: ""
+        )
+        let state2 = TableViewController.State(
+            dataSource:TableViewControllerDataSource(todos: ["1", "3"], owner: nil),
+            text: "Hello"
+        )
+        let state3 = TableViewController.State(
+            dataSource:TableViewControllerDataSource(todos: ["Hello", "2", "3"], owner: nil),
+            text: "2"
+        )
+        
+        let state4 = TableViewController.State(
+            dataSource:TableViewControllerDataSource(todos: [], owner: nil),
+            text: "onevcat"
+        )
+        
+        controller.updateView(state: state2, previousState: state1)
+        XCTAssertEqual(controller.title, "TODO - (2)")
+        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 2)
+        XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 1))?.textLabel?.text, "3")
         XCTAssertTrue(controller.navigationItem.rightBarButtonItem!.isEnabled)
         
-        controller.state = TableViewController.State(todos: [], text: "")
-        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 0)
-        XCTAssertEqual(controller.title, "TODO - (0)")
+        controller.updateView(state: state3, previousState: state2)
+        XCTAssertEqual(controller.title, "TODO - (3)")
+        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 3)
+        XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 0))?.textLabel?.text, "Hello")
         XCTAssertFalse(controller.navigationItem.rightBarButtonItem!.isEnabled)
+        
+        controller.updateView(state: state4, previousState: state3)
+        XCTAssertEqual(controller.title, "TODO - (0)")
+        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 0)
+        XCTAssertNil(controller.tableView.cellForRow(at: todoItemIndexPath(row: 0)))
+        XCTAssertTrue(controller.navigationItem.rightBarButtonItem!.isEnabled)
     }
     
     func testAdding() {
         let testItem = "Test Item"
         
-        let originalTodos = controller.state.todos
-        controller.state = TableViewController.State(todos: originalTodos, text: testItem)
+        let originalTodos = controller.store.state.dataSource.todos
+        controller.store.dispatch(.updateText(text: testItem))
         controller.addButtonPressed(self)
-        XCTAssertEqual(controller.state.todos, [testItem] + originalTodos)
-        XCTAssertEqual(controller.state.text, "")
+        
+        let newState = controller.store.state
+        XCTAssertEqual(newState.dataSource.todos, [testItem] + originalTodos)
+        XCTAssertEqual(newState.text, "")
     }
     
     func testRemoving() {
-        controller.state = TableViewController.State(todos: ["1", "2", "3"], text: "")
+        controller.store.dispatch(.addToDos(items: ["1", "2", "3"]))
         controller.tableView(controller.tableView, didSelectRowAt: todoItemIndexPath(row: 1))
-        XCTAssertEqual(controller.state.todos, ["1", "3"])
+        XCTAssertEqual(controller.store.state.dataSource.todos, ["1", "3"])
     }
     
     func testInputChanged() {
         controller.inputChanged(cell: TableViewInputCell(), text: "Hello")
-        XCTAssertEqual(controller.state.text, "Hello")
+        XCTAssertEqual(controller.store.state.text, "Hello")
     }
 }
 
