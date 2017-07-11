@@ -9,19 +9,25 @@
 import UIKit
 
 class TableViewControllerDataSource: NSObject, UITableViewDataSource {
+    
+    enum Section: Int {
+        case input = 0, todos, max
+    }
+    
     var todos: [String]
     weak var owner: TableViewController?
+    
     init(todos: [String], owner: TableViewController?) {
         self.todos = todos
         self.owner = owner
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return TableViewController.Section.max.rawValue
+        return Section.max.rawValue
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let section = TableViewController.Section(rawValue: section) else {
+        guard let section = Section(rawValue: section) else {
             fatalError()
         }
         switch section {
@@ -32,7 +38,7 @@ class TableViewControllerDataSource: NSObject, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let section = TableViewController.Section(rawValue: indexPath.section) else {
+        guard let section = Section(rawValue: indexPath.section) else {
             fatalError()
         }
         

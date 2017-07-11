@@ -38,32 +38,6 @@ class TableViewController: UITableViewController {
         return state
     }
     
-    func updateView(state: State, previousState: State?) {
-        guard let previousState = previousState else { return }
-        
-        if previousState.dataSource.todos != state.dataSource.todos {
-            let dataSource = state.dataSource
-            tableView.dataSource = dataSource
-            tableView.reloadData()
-            title = "TODO - (\(dataSource.todos.count))"
-        }
-        
-        if (previousState.text != state.text) {
-            let isItemLengthEnough = state.text.count >= 3
-            navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
-            
-            let inputIndexPath = IndexPath(row: 0, section: Section.input.rawValue)
-            guard let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell else {
-                return
-            }
-            inputCell.textField.text = state.text
-        }
-    }
-    
-    enum Section: Int {
-        case input = 0, todos, max
-    }
-    
     var store: Store<Action, State>!
     
     override func viewDidLoad() {
@@ -80,8 +54,30 @@ class TableViewController: UITableViewController {
         }
     }
     
+    func updateView(state: State, previousState: State?) {
+        guard let previousState = previousState else { return }
+        
+        if previousState.dataSource.todos != state.dataSource.todos {
+            let dataSource = state.dataSource
+            tableView.dataSource = dataSource
+            tableView.reloadData()
+            title = "TODO - (\(dataSource.todos.count))"
+        }
+        
+        if (previousState.text != state.text) {
+            let isItemLengthEnough = state.text.count >= 3
+            navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
+            
+            let inputIndexPath = IndexPath(row: 0, section: TableViewControllerDataSource.Section.input.rawValue)
+            guard let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell else {
+                return
+            }
+            inputCell.textField.text = state.text
+        }
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard indexPath.section == Section.todos.rawValue else { return }
+        guard indexPath.section == TableViewControllerDataSource.Section.todos.rawValue else { return }
         store.dispatch(.removeToDo(index: indexPath.row))
     }
     
