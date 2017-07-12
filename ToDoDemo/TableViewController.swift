@@ -30,7 +30,7 @@ class TableViewController: UITableViewController {
         case someOtherCommand
     }
     
-    func reducer(action: Action, state: State) -> (state: State, command: Command?) {
+    func reducer(state: State, action: Action) -> (state: State, command: Command?) {
         var state = state
         var command: Command? = nil
         
@@ -56,13 +56,13 @@ class TableViewController: UITableViewController {
         let dataSource = TableViewControllerDataSource(todos: [], owner: self)
         store = Store<Action, State, Command>(reducer: reducer, initialState: State(dataSource: dataSource, text: ""))
         store.subscribe { [weak self] state, previousState, command in
-            self?.updateView(state: state, previousState: previousState, command: command)
+            self?.stateDidChanged(state: state, previousState: previousState, command: command)
         }
-        updateView(state: store.state, previousState: nil, command: nil)
+        stateDidChanged(state: store.state, previousState: nil, command: nil)
         store.dispatch(.loadToDos)
     }
     
-    func updateView(state: State, previousState: State?, command: Command?) {
+    func stateDidChanged(state: State, previousState: State?, command: Command?) {
         
         if let command = command {
             switch command {
