@@ -48,6 +48,7 @@ class TableViewController: UITableViewController {
         store.subscribe { [weak self] state, previousState in
             self?.updateView(state: state, previousState: previousState)
         }
+        updateView(state: store.state, previousState: nil)
         
         ToDoStore.shared.getToDoItems { data in
             self.store.dispatch(.addToDos(items: data))
@@ -69,10 +70,8 @@ class TableViewController: UITableViewController {
             navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
             
             let inputIndexPath = IndexPath(row: 0, section: TableViewControllerDataSource.Section.input.rawValue)
-            guard let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell else {
-                return
-            }
-            inputCell.textField.text = state.text
+            let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell
+            inputCell?.textField.text = state.text
         }
     }
     

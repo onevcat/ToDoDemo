@@ -76,19 +76,19 @@ class ToDoDemoTests: XCTestCase {
         
         controller.updateView(state: state2, previousState: state1)
         XCTAssertEqual(controller.title, "TODO - (2)")
-        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 2)
+        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 2)
         XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 1))?.textLabel?.text, "3")
         XCTAssertTrue(controller.navigationItem.rightBarButtonItem!.isEnabled)
         
         controller.updateView(state: state3, previousState: state2)
         XCTAssertEqual(controller.title, "TODO - (3)")
-        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 3)
+        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 3)
         XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 0))?.textLabel?.text, "Hello")
         XCTAssertFalse(controller.navigationItem.rightBarButtonItem!.isEnabled)
         
         controller.updateView(state: state4, previousState: state3)
         XCTAssertEqual(controller.title, "TODO - (0)")
-        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewController.Section.todos.rawValue), 0)
+        XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 0)
         XCTAssertNil(controller.tableView.cellForRow(at: todoItemIndexPath(row: 0)))
         XCTAssertTrue(controller.navigationItem.rightBarButtonItem!.isEnabled)
     }
@@ -118,6 +118,6 @@ class ToDoDemoTests: XCTestCase {
 }
 
 func todoItemIndexPath(row: Int) -> IndexPath {
-    return IndexPath(row: row, section: TableViewController.Section.todos.rawValue)
+    return IndexPath(row: row, section: TableViewControllerDataSource.Section.todos.rawValue)
 }
 
