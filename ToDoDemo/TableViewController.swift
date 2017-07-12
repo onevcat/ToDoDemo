@@ -30,10 +30,8 @@ class TableViewController: UITableViewController {
                 navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
                 
                 let inputIndexPath = IndexPath(row: 0, section: Section.input.rawValue)
-                guard let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell else {
-                    return
-                }
-                inputCell.textField.text = state.text
+                let inputCell = tableView.cellForRow(at: inputIndexPath) as? TableViewInputCell
+                inputCell?.textField.text = state.text
             }
         }
     }
