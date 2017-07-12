@@ -117,17 +117,13 @@ class ToDoDemoTests: XCTestCase {
     }
     
     func testLoadToDos() {
-        var initState = TableViewController.State()
-        initState.dataSource = TableViewControllerDataSource(todos: ["1"], owner: nil)
-        let (state, command) = controller.reducer(action: .loadToDos, state: initState)
-        XCTAssertEqual(state.dataSource.todos, ["1"])
+        let initState = TableViewController.State()
+        let (_, command) = controller.reducer(action: .loadToDos, state: initState)
         XCTAssertNotNil(command)
         switch command! {
         case .loadToDos(let handler):
-            let action = handler(["2", "3"])
-            let (newState, newCommand) = controller.reducer(action: action, state: state)
-            controller.updateView(state: newState, previousState: state, command: newCommand)
-            XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 3)
+            handler(["2", "3"])
+            XCTAssertEqual(controller.store.state.dataSource.todos, ["2", "3"])
         default:
             XCTFail("The command should be .loadToDos")
         }

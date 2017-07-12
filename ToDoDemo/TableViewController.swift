@@ -26,7 +26,7 @@ class TableViewController: UITableViewController {
     }
     
     enum Command: CommandType {
-        case loadToDos(completion: ([String]) -> Action )
+        case loadToDos(completion: ([String]) -> Void )
         case someOtherCommand
     }
     
@@ -43,7 +43,7 @@ class TableViewController: UITableViewController {
             let oldTodos = state.dataSource.todos
             state.dataSource = TableViewControllerDataSource(todos: Array(oldTodos[..<index] + oldTodos[(index + 1)...]), owner: state.dataSource.owner)
         case .loadToDos:
-            command = Command.loadToDos(completion: Action.addToDos)
+            command = Command.loadToDos { self.store.dispatch(.addToDos(items: $0)) }
         }
         return (state, command)
     }
@@ -67,7 +67,7 @@ class TableViewController: UITableViewController {
         if let command = command {
             switch command {
             case .loadToDos(let handler):
-                ToDoStore.shared.getToDoItems { self.store.dispatch(handler($0)) }
+                ToDoStore.shared.getToDoItems(completionHandler: handler)
             case .someOtherCommand:
                 // Placeholder command.
                 break
