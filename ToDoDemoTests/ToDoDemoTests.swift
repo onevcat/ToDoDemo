@@ -128,6 +128,8 @@ class ToDoDemoTests: XCTestCase {
             let (newState, newCommand) = controller.reducer(action: action, state: state)
             controller.updateView(state: newState, previousState: state, command: newCommand)
             XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 3)
+        default:
+            XCTFail("The command should be .loadToDos")
         }
     }
 }

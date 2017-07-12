@@ -27,6 +27,7 @@ class TableViewController: UITableViewController {
     
     enum Command: CommandType {
         case loadToDos(completion: ([String]) -> Action )
+        case someOtherCommand
     }
     
     func reducer(action: Action, state: State) -> (state: State, command: Command?) {
@@ -67,6 +68,9 @@ class TableViewController: UITableViewController {
             switch command {
             case .loadToDos(let handler):
                 ToDoStore.shared.getToDoItems { self.store.dispatch(handler($0)) }
+            case .someOtherCommand:
+                // Placeholder command.
+                break
             }
         }
         
