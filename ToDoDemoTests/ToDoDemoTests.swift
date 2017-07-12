@@ -29,28 +29,28 @@ class ToDoDemoTests: XCTestCase {
     
     func testReducerUpdateTextFromEmpty() {
         let initState = TableViewController.State()
-        let state = controller.reducer(action: .updateText(text: "123"), state: initState)
+        let state = controller.reducer(action: .updateText(text: "123"), state: initState).state
         XCTAssertEqual(state.text, "123")
     }
     
     func testReducerUpdateTextFromExisting() {
         var initState = TableViewController.State()
         initState.text = "123"
-        let state = controller.reducer(action: .updateText(text: "321"), state: initState)
+        let state = controller.reducer(action: .updateText(text: "321"), state: initState).state
         XCTAssertEqual(state.text, "321")
     }
     
     func testReducerUpdateTextToEmpty() {
         var initState = TableViewController.State()
         initState.text = "123"
-        let state = controller.reducer(action: .updateText(text: ""), state: initState)
+        let state = controller.reducer(action: .updateText(text: ""), state: initState).state
         XCTAssertEqual(state.text, "")
     }
     
     func testReducerAddToDos() {
         var initState = TableViewController.State()
         initState.dataSource = TableViewControllerDataSource(todos: ["1"], owner: nil)
-        let state = controller.reducer(action: .addToDos(items: ["3", "2"]), state: initState)
+        let state = controller.reducer(action: .addToDos(items: ["3", "2"]), state: initState).state
         XCTAssertEqual(state.dataSource.todos, ["3", "2", "1"])
     }
     
@@ -74,19 +74,19 @@ class ToDoDemoTests: XCTestCase {
             text: "onevcat"
         )
         
-        controller.updateView(state: state2, previousState: state1)
+        controller.updateView(state: state2, previousState: state1, command: nil)
         XCTAssertEqual(controller.title, "TODO - (2)")
         XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 2)
         XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 1))?.textLabel?.text, "3")
         XCTAssertTrue(controller.navigationItem.rightBarButtonItem!.isEnabled)
         
-        controller.updateView(state: state3, previousState: state2)
+        controller.updateView(state: state3, previousState: state2, command: nil)
         XCTAssertEqual(controller.title, "TODO - (3)")
         XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 3)
         XCTAssertEqual(controller.tableView.cellForRow(at: todoItemIndexPath(row: 0))?.textLabel?.text, "Hello")
         XCTAssertFalse(controller.navigationItem.rightBarButtonItem!.isEnabled)
         
-        controller.updateView(state: state4, previousState: state3)
+        controller.updateView(state: state4, previousState: state3, command: nil)
         XCTAssertEqual(controller.title, "TODO - (0)")
         XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 0)
         XCTAssertNil(controller.tableView.cellForRow(at: todoItemIndexPath(row: 0)))
@@ -114,6 +114,21 @@ class ToDoDemoTests: XCTestCase {
     func testInputChanged() {
         controller.inputChanged(cell: TableViewInputCell(), text: "Hello")
         XCTAssertEqual(controller.store.state.text, "Hello")
+    }
+    
+    func testLoadToDos() {
+        var initState = TableViewController.State()
+        initState.dataSource = TableViewControllerDataSource(todos: ["1"], owner: nil)
+        let (state, command) = controller.reducer(action: .loadToDos, state: initState)
+        XCTAssertEqual(state.dataSource.todos, ["1"])
+        XCTAssertNotNil(command)
+        switch command! {
+        case .loadToDos(let handler):
+            let action = handler(["2", "3"])
+            let (newState, newCommand) = controller.reducer(action: action, state: state)
+            controller.updateView(state: newState, previousState: state, command: newCommand)
+            XCTAssertEqual(controller.tableView.numberOfRows(inSection: TableViewControllerDataSource.Section.todos.rawValue), 3)
+        }
     }
 }
 

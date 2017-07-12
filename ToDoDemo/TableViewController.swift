@@ -22,10 +22,17 @@ class TableViewController: UITableViewController {
         case updateText(text: String)
         case addToDos(items: [String])
         case removeToDo(index: Int)
+        case loadToDos
     }
     
-    func reducer(action: Action, state: State) -> State {
+    enum Command: CommandType {
+        case loadToDos(completion: ([String]) -> Action )
+    }
+    
+    func reducer(action: Action, state: State) -> (state: State, command: Command?) {
         var state = state
+        var command: Command? = nil
+        
         switch action {
         case .updateText(let text):
             state.text = text
@@ -34,28 +41,35 @@ class TableViewController: UITableViewController {
         case .removeToDo(let index):
             let oldTodos = state.dataSource.todos
             state.dataSource = TableViewControllerDataSource(todos: Array(oldTodos[..<index] + oldTodos[(index + 1)...]), owner: state.dataSource.owner)
+        case .loadToDos:
+            command = Command.loadToDos(completion: Action.addToDos)
         }
-        return state
+        return (state, command)
     }
     
-    var store: Store<Action, State>!
+    var store: Store<Action, State, Command>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let dataSource = TableViewControllerDataSource(todos: [], owner: self)
-        store = Store<Action, State>(reducer: reducer, initialState: State(dataSource: dataSource, text: ""))
-        store.subscribe { [weak self] state, previousState in
-            self?.updateView(state: state, previousState: previousState)
+        store = Store<Action, State, Command>(reducer: reducer, initialState: State(dataSource: dataSource, text: ""))
+        store.subscribe { [weak self] state, previousState, command in
+            self?.updateView(state: state, previousState: previousState, command: command)
         }
-        updateView(state: store.state, previousState: nil)
-        
-        ToDoStore.shared.getToDoItems { data in
-            self.store.dispatch(.addToDos(items: data))
-        }
+        updateView(state: store.state, previousState: nil, command: nil)
+        store.dispatch(.loadToDos)
     }
     
-    func updateView(state: State, previousState: State?) {
+    func updateView(state: State, previousState: State?, command: Command?) {
+        
+        if let command = command {
+            switch command {
+            case .loadToDos(let handler):
+                ToDoStore.shared.getToDoItems { self.store.dispatch(handler($0)) }
+            }
+        }
+        
         guard let previousState = previousState else { return }
         
         if previousState.dataSource.todos != state.dataSource.todos {

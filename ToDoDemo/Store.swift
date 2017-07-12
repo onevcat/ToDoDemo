@@ -10,18 +10,19 @@ import Foundation
 
 protocol ActionType {}
 protocol StateType {}
+protocol CommandType {}
 
-class Store<A: ActionType, S: StateType> {
-    let reducer: (_ action: A, _ state: S) -> S
-    var subscribe: ((_ state: S, _ previousState: S) -> Void)?
+class Store<A: ActionType, S: StateType, C: CommandType> {
+    let reducer: (_ action: A, _ state: S) -> (S, C?)
+    var subscribe: ((_ state: S, _ previousState: S, _ command: C?) -> Void)?
     var state: S
     
-    init(reducer: @escaping (A, S) -> S, initialState: S) {
+    init(reducer: @escaping (A, S) -> (S, C?), initialState: S) {
         self.reducer = reducer
         self.state = initialState
     }
     
-    func subscribe(_ handler: @escaping (S, S) -> Void) {
+    func subscribe(_ handler: @escaping (S, S, C?) -> Void) {
         self.subscribe = handler
     }
     
@@ -31,9 +32,9 @@ class Store<A: ActionType, S: StateType> {
     
     func dispatch(_ action: A) {
         let previousState = state
-        state = reducer(action, state)
-        subscribe?(state, previousState)
-        
+        let (nextState, command) = reducer(action, state)
+        state = nextState
+        subscribe?(state, previousState, command)
     }
 }
 
