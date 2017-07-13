@@ -81,16 +81,14 @@ class TableViewController: UITableViewController {
             }
         }
         
-        guard let previousState = previousState else { return }
-        
-        if previousState.dataSource.todos != state.dataSource.todos {
+        if previousState == nil || previousState!.dataSource.todos != state.dataSource.todos {
             let dataSource = state.dataSource
             tableView.dataSource = dataSource
             tableView.reloadData()
             title = "TODO - (\(dataSource.todos.count))"
         }
         
-        if (previousState.text != state.text) {
+        if previousState == nil  || previousState!.text != state.text {
             let isItemLengthEnough = state.text.count >= 3
             navigationItem.rightBarButtonItem?.isEnabled = isItemLengthEnough
             
