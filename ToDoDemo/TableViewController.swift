@@ -30,7 +30,9 @@ class TableViewController: UITableViewController {
         case someOtherCommand
     }
     
-    func reducer(state: State, action: Action) -> (state: State, command: Command?) {
+    lazy var reducer: (State, Action) -> (state: State, command: Command?) = {
+        [weak self] (state: State, action: Action) in
+   
         var state = state
         var command: Command? = nil
         
@@ -43,7 +45,7 @@ class TableViewController: UITableViewController {
             let oldTodos = state.dataSource.todos
             state.dataSource = TableViewControllerDataSource(todos: Array(oldTodos[..<index] + oldTodos[(index + 1)...]), owner: state.dataSource.owner)
         case .loadToDos:
-            command = Command.loadToDos { self.store.dispatch(.addToDos(items: $0)) }
+            command = Command.loadToDos { self?.store.dispatch(.addToDos(items: $0)) }
         }
         return (state, command)
     }
@@ -54,12 +56,17 @@ class TableViewController: UITableViewController {
         super.viewDidLoad()
         
         let dataSource = TableViewControllerDataSource(todos: [], owner: self)
+        
         store = Store<Action, State, Command>(reducer: reducer, initialState: State(dataSource: dataSource, text: ""))
         store.subscribe { [weak self] state, previousState, command in
             self?.stateDidChanged(state: state, previousState: previousState, command: command)
         }
         stateDidChanged(state: store.state, previousState: nil, command: nil)
         store.dispatch(.loadToDos)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     func stateDidChanged(state: State, previousState: State?, command: Command?) {

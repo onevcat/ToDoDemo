@@ -29,28 +29,28 @@ class ToDoDemoTests: XCTestCase {
     
     func testReducerUpdateTextFromEmpty() {
         let initState = TableViewController.State()
-        let state = controller.reducer(state: initState, action: .updateText(text: "123")).state
+        let state = controller.reducer(initState, .updateText(text: "123")).state
         XCTAssertEqual(state.text, "123")
     }
     
     func testReducerUpdateTextFromExisting() {
         var initState = TableViewController.State()
         initState.text = "123"
-        let state = controller.reducer(state: initState, action: .updateText(text: "321")).state
+        let state = controller.reducer(initState, .updateText(text: "321")).state
         XCTAssertEqual(state.text, "321")
     }
     
     func testReducerUpdateTextToEmpty() {
         var initState = TableViewController.State()
         initState.text = "123"
-        let state = controller.reducer(state: initState, action: .updateText(text: "")).state
+        let state = controller.reducer(initState, .updateText(text: "")).state
         XCTAssertEqual(state.text, "")
     }
     
     func testReducerAddToDos() {
         var initState = TableViewController.State()
         initState.dataSource = TableViewControllerDataSource(todos: ["1"], owner: nil)
-        let state = controller.reducer(state: initState, action: .addToDos(items: ["3", "2"])).state
+        let state = controller.reducer(initState, .addToDos(items: ["3", "2"])).state
         XCTAssertEqual(state.dataSource.todos, ["3", "2", "1"])
     }
     
@@ -118,7 +118,7 @@ class ToDoDemoTests: XCTestCase {
     
     func testLoadToDos() {
         let initState = TableViewController.State()
-        let (_, command) = controller.reducer(state: initState, action: .loadToDos)
+        let (_, command) = controller.reducer(initState, .loadToDos)
         XCTAssertNotNil(command)
         switch command! {
         case .loadToDos(let handler):
