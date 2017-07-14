@@ -86,6 +86,7 @@ class TableViewController: UITableViewController {
         title = "TODO - (\(todos.count))"
         tableView.reloadData()
         inputCell.textField.text = ""
+        navigationItem.rightBarButtonItem?.isEnabled = false
     }
 }
 
