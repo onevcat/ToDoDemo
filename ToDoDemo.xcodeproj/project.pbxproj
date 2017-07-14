@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4B0131361F0E114600F35D70 /* TableInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B0131351F0E114600F35D70 /* TableInputCell.swift */; };
-		4B03721F1F0F37D90075705C /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B03721E1F0F37D90075705C /* TableViewDataSource.swift */; };
 		4B5B9B3B1F0DDD580056E239 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5B9B3A1F0DDD580056E239 /* AppDelegate.swift */; };
 		4B5B9B3D1F0DDD580056E239 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B5B9B3C1F0DDD580056E239 /* TableViewController.swift */; };
 		4B5B9B401F0DDD580056E239 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B5B9B3E1F0DDD580056E239 /* Main.storyboard */; };
@@ -16,7 +15,6 @@
 		4B5B9B451F0DDD580056E239 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B5B9B431F0DDD580056E239 /* LaunchScreen.storyboard */; };
 		D12296091F0E5FEE00A6F559 /* ToDoDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12296081F0E5FEE00A6F559 /* ToDoDemoTests.swift */; };
 		D1CA9FF81F0E4FA6003EA944 /* ToDoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA9FF71F0E4FA6003EA944 /* ToDoStore.swift */; };
-		D1ECABA81F0E7FF500836642 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1ECABA71F0E7FF500836642 /* Store.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,7 +29,6 @@
 
 /* Begin PBXFileReference section */
 		4B0131351F0E114600F35D70 /* TableInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableInputCell.swift; sourceTree = "<group>"; };
-		4B03721E1F0F37D90075705C /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		4B5B9B371F0DDD580056E239 /* ToDoDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B5B9B3A1F0DDD580056E239 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4B5B9B3C1F0DDD580056E239 /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
@@ -43,7 +40,6 @@
 		D12296081F0E5FEE00A6F559 /* ToDoDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoDemoTests.swift; sourceTree = "<group>"; };
 		D122960A1F0E5FEE00A6F559 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1CA9FF71F0E4FA6003EA944 /* ToDoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoStore.swift; sourceTree = "<group>"; };
-		D1ECABA71F0E7FF500836642 /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,14 +83,12 @@
 			children = (
 				4B5B9B3A1F0DDD580056E239 /* AppDelegate.swift */,
 				4B5B9B3C1F0DDD580056E239 /* TableViewController.swift */,
-				4B03721E1F0F37D90075705C /* TableViewDataSource.swift */,
 				4B0131351F0E114600F35D70 /* TableInputCell.swift */,
 				D1CA9FF71F0E4FA6003EA944 /* ToDoStore.swift */,
 				4B5B9B3E1F0DDD580056E239 /* Main.storyboard */,
 				4B5B9B411F0DDD580056E239 /* Assets.xcassets */,
 				4B5B9B431F0DDD580056E239 /* LaunchScreen.storyboard */,
 				4B5B9B461F0DDD580056E239 /* Info.plist */,
-				D1ECABA71F0E7FF500836642 /* Store.swift */,
 			);
 			path = ToDoDemo;
 			sourceTree = "<group>";
@@ -209,8 +203,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B03721F1F0F37D90075705C /* TableViewDataSource.swift in Sources */,
-				D1ECABA81F0E7FF500836642 /* Store.swift in Sources */,
 				4B5B9B3D1F0DDD580056E239 /* TableViewController.swift in Sources */,
 				D1CA9FF81F0E4FA6003EA944 /* ToDoStore.swift in Sources */,
 				4B0131361F0E114600F35D70 /* TableInputCell.swift in Sources */,
