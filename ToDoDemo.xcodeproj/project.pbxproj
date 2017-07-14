@@ -13,7 +13,6 @@
 		4B5B9B401F0DDD580056E239 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B5B9B3E1F0DDD580056E239 /* Main.storyboard */; };
 		4B5B9B421F0DDD580056E239 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4B5B9B411F0DDD580056E239 /* Assets.xcassets */; };
 		4B5B9B451F0DDD580056E239 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4B5B9B431F0DDD580056E239 /* LaunchScreen.storyboard */; };
-		D12296091F0E5FEE00A6F559 /* ToDoDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12296081F0E5FEE00A6F559 /* ToDoDemoTests.swift */; };
 		D1CA9FF81F0E4FA6003EA944 /* ToDoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CA9FF71F0E4FA6003EA944 /* ToDoStore.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,8 +36,6 @@
 		4B5B9B441F0DDD580056E239 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4B5B9B461F0DDD580056E239 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D12296061F0E5FEE00A6F559 /* ToDoDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		D12296081F0E5FEE00A6F559 /* ToDoDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoDemoTests.swift; sourceTree = "<group>"; };
-		D122960A1F0E5FEE00A6F559 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D1CA9FF71F0E4FA6003EA944 /* ToDoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,7 +61,6 @@
 			isa = PBXGroup;
 			children = (
 				4B5B9B391F0DDD580056E239 /* ToDoDemo */,
-				D12296071F0E5FEE00A6F559 /* ToDoDemoTests */,
 				4B5B9B381F0DDD580056E239 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -91,15 +87,6 @@
 				4B5B9B461F0DDD580056E239 /* Info.plist */,
 			);
 			path = ToDoDemo;
-			sourceTree = "<group>";
-		};
-		D12296071F0E5FEE00A6F559 /* ToDoDemoTests */ = {
-			isa = PBXGroup;
-			children = (
-				D12296081F0E5FEE00A6F559 /* ToDoDemoTests.swift */,
-				D122960A1F0E5FEE00A6F559 /* Info.plist */,
-			);
-			path = ToDoDemoTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,7 +201,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D12296091F0E5FEE00A6F559 /* ToDoDemoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
